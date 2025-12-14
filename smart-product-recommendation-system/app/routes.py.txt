@@ -1,0 +1,15 @@
+from flask import Blueprint, jsonify
+import pandas as pd
+from model.recommender import CollaborativeFiltering
+
+recommendation_routes = Blueprint('recommendation_routes', __name__)
+
+data = pd.read_csv("data/sample_interactions.csv")
+matrix = data.pivot(index='user_id', columns='product_id', values='rating').fillna(0)
+model = CollaborativeFiltering(matrix.values)
+
+@recommendation_routes.route("/recommend/<int:user_id>")
+def recommend(user_id):
+    recommendations = model.recommend(user_id)
+    return jsonify({"recommended_products": recommendations.tolist()})
+

@@ -1,0 +1,12 @@
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+class CollaborativeFiltering:
+    def __init__(self, user_item_matrix):
+        self.user_item_matrix = user_item_matrix
+
+    def recommend(self, user_id, top_n=5):
+        similarity = cosine_similarity(self.user_item_matrix)
+        scores = similarity[user_id]
+        recommendations = np.argsort(scores)[::-1][:top_n]
+        return recommendations

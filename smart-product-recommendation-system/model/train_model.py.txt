@@ -1,0 +1,12 @@
+import pandas as pd
+from recommender import CollaborativeFiltering
+
+data = pd.read_csv("../data/sample_interactions.csv")
+
+user_item_matrix = data.pivot(
+    index='user_id',
+    columns='product_id',
+    values='rating'
+).fillna(0)
+
+model = CollaborativeFiltering(user_item_matrix.values)
